@@ -1,14 +1,9 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react';
+import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
+import { createAppContainer } from 'react-navigation';
+import { Header, Left, Right, Icon, Body } from 'native-base';
 
-import React, { Fragment, useState, useEffect } from 'react';
-import { List, ListItem } from 'react-native-elements';
-// import axios from 'axios';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,120 +12,68 @@ import {
   Text,
   StatusBar,
   FlatList,
+  Image
 
 } from 'react-native';
+import Bebidas from "./screens/Bebidas";
+import Home from "./screens/Home";
+import Comidas from "./screens/Comidas";
 
-function App() {
+const CustomDrawerComponent = (props) => (
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{height:150, backgroundColor:'white', alignItems:'center', justifyContent:'center'}}>
+        <Image source={require('./assets/logobar.jpg')} style={{height: 120, width:120, borderRadius:60}}/>
+      </View>
+      <ScrollView>
+        <DrawerNavigatorItems {...props}/>
+      </ScrollView>
+    </SafeAreaView>
+)
 
-  // axios.get('https://api.cardapiodig.com.br/api/v1/produtos')
-  //   .then(function (response) {
-  //     response.data.forEach(function (value) {
-  //       console.log(value);
-  //       list.push(value);
-  //     });
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
+const MyDrawerNavigator = createDrawerNavigator({
+  Home: {
+    screen:Home,
+    navigationOptions: {
+      title: 'Home',
+      drawerLabel: 'Home',
+      drawerIcon: () => (
+        <Icon name={'home'} size={25} />
+        )
+    },
+  },
+  Bebidas: {
+    screen:Bebidas,
+    navigationOptions: {
+      title: 'Bebidas',
+      drawerLabel: 'Bebidas',
+      drawerIcon: () => (
+        <Icon name={'ios-beer'} size={25} />
+        )
+    },
+  },
+  Comidas: {
+    screen:Comidas,
+    navigationOptions: {
+      title: 'Comidas',
+      drawerLabel: 'Comidas',
+      drawerIcon: () => (
+        <Icon name={'ios-restaurant'} size={25} />
+        )
+    },
+  },
+}, {
+  contentComponent: CustomDrawerComponent,
+  contentOptions: {
+    activeTintColor: 'orange'
+  },
+  hideStatusBar:true
+});
 
-  const [list] = useState([
-    {
-      name: 'Skol',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Brahma',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Antartica Original',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Bohemia',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Heinekein',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Kaiser',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Antartica Original',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Bohemia',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Heinekein',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Kaiser',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Bohemia',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Heinekein',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-    {
-      name: 'Kaiser',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Bebida'
-    },
-  ])
+const MyApp = createAppContainer(MyDrawerNavigator);
 
+function App(){
   return (
-<View>
-<ScrollView>
-  {
-    list.map((l, i) => (
-      <ListItem
-        key={i}
-        leftAvatar={{ source: { uri: l.avatar_url } }}
-        title={l.name}
-        subtitle={l.subtitle}
-        bottomDivider
-      />
-    ))
-  }
-  </ScrollView>
-</View>
+    <MyApp />
   )
 }
-export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22,
-    backgroundColor: '#FFFFFF'
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-})
-
+export default App
