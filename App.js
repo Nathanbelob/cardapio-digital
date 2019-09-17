@@ -12,20 +12,29 @@ import {
   Text,
   StatusBar,
   FlatList,
-  Image
+  Image,
 
 } from 'react-native';
-import Bebidas from "./screens/Bebidas";
+import Cervejas from "./screens/Cervejas";
+import Drinks from "./screens/Drinks";
 import Home from "./screens/Home";
-import Comidas from "./screens/Comidas";
+import Porcoes from "./screens/Porcoes";
 
-const CustomDrawerComponent = (props) => (
+const CustomDrawerComponent = ({items, ...props}) => (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{height:150, backgroundColor:'white', alignItems:'center', justifyContent:'center'}}>
-        <Image source={require('./assets/logobar.jpg')} style={{height: 120, width:120, borderRadius:60}}/>
+      <View style={{height:150, backgroundColor:'gray', alignItems:'center', justifyContent:'center', marginBottom:10}}>
+        <Image source={require('./assets/logo-bar.jpeg')} style={{height: 120, width:120, borderRadius:60}}/>
       </View>
       <ScrollView>
-        <DrawerNavigatorItems {...props}/>
+      <Text style={{textAlign:'center'}}>Bebidas</Text>
+        <DrawerNavigatorItems {...props}
+        items={items.filter(item => item.routeName === "Cervejas" || item.routeName === "Drinks")}
+        />
+        <View style={{width:'90%', alignSelf: 'center', height:1, backgroundColor: 'gray', margin: 15}}></View> 
+        <Text style={{textAlign:'center'}}>Comidas</Text>
+        <DrawerNavigatorItems {...props}
+        items={items.filter(item => item.routeName === "Porções")}
+        />
       </ScrollView>
     </SafeAreaView>
 )
@@ -34,28 +43,33 @@ const MyDrawerNavigator = createDrawerNavigator({
   Home: {
     screen:Home,
     navigationOptions: {
-      title: 'Home',
-      drawerLabel: 'Home',
-      drawerIcon: () => (
-        <Icon name={'home'} size={25} />
-        )
+      drawerLabel: () => null,
     },
   },
-  Bebidas: {
-    screen:Bebidas,
+  Cervejas: {
+    screen:Cervejas,
     navigationOptions: {
-      title: 'Bebidas',
-      drawerLabel: 'Bebidas',
+      title: 'Cervejas',
+      drawerLabel: 'Cervejas',
       drawerIcon: () => (
         <Icon name={'ios-beer'} size={25} />
         )
     },
   },
-  Comidas: {
-    screen:Comidas,
+  Drinks: {
+    screen:Drinks,
     navigationOptions: {
-      title: 'Comidas',
-      drawerLabel: 'Comidas',
+      title: 'Drinks',
+      drawerLabel: 'Drinks',
+      drawerIcon: () => (
+        <Icon name={'ios-wine'} size={25} />
+        )
+    },
+  },
+  Porções: {
+    screen:Porcoes,
+    navigationOptions: {
+      drawerLabel: 'Porções',
       drawerIcon: () => (
         <Icon name={'ios-restaurant'} size={25} />
         )

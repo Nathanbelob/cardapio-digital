@@ -32,7 +32,7 @@ function App(props) {
           <Right />
         </Header>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <Image source={require('../assets/logobar.jpg')} style={{ height: 120, width: 120 }} />
+          <Image source={require('../assets/logo-bar.jpeg')} style={{ height: 120, width: 120 }} />
         </View>
       </View>
     )

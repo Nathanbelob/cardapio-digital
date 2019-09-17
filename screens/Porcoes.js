@@ -24,7 +24,7 @@ import {
 } from 'react-native';
 import { Header, Left, Right, Icon, Body } from 'native-base';
 
-function Comidas(props) {
+function Porcoes(props) {
 
   // axios.get('https://api.cardapiodig.com.br/api/v1/produtos')
   //   .then(function (response) {
@@ -134,7 +134,7 @@ function Comidas(props) {
                   'Adicionar aos pedidos?',
                   'Esse item será adicionado a sua lista de pedidos',
                   [
-                    {text: 'Já efetuar o pedido!', onPress: () => console.log('Ask me later pressed')},
+                    {text: 'Já efetuar o pedido!', onPress: () => Alert.alert('Pedido realizado com sucesso!')},
                     {
                       text: 'Cancel',
                       onPress: () => console.log('Cancel Pressed'),
@@ -153,7 +153,7 @@ function Comidas(props) {
     </>
   )
 }
-export default Comidas;
+export default Porcoes;
 
 const styles = StyleSheet.create({
   container: {

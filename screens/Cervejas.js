@@ -8,9 +8,9 @@
 
 import React, { Fragment, useState, useEffect } from 'react';
 import { List, ListItem } from 'react-native-elements';
-import { Header, Left, Right, Icon, Body  } from 'native-base';
+import { Header, Left, Right, Icon, Body } from 'native-base';
 
-// import axios from 'axios';
+import axios from 'axios';
 import {
   SafeAreaView,
   StyleSheet,
@@ -23,7 +23,7 @@ import {
   Alert
 } from 'react-native';
 
-function Bebidas(props) {
+function Cervejas(props) {
 
   // axios.get('https://api.cardapiodig.com.br/api/v1/produtos')
   //   .then(function (response) {
@@ -85,8 +85,8 @@ function Bebidas(props) {
         <Left>
           <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
         </Left>
-        <Body/>
-        <Right/>
+        <Body />
+        <Right />
       </Header>
       <ScrollView>
         {
@@ -98,22 +98,29 @@ function Bebidas(props) {
               subtitle={l.subtitle}
               bottomDivider
               fontFamily
-              onPress={() => { 
+              onPress={() => {
                 Alert.alert(
                   'Adicionar aos pedidos?',
                   'Esse item será adicionado a sua lista de pedidos',
                   [
-                    {text: 'Já efetuar o pedido!', onPress: () => console.log('Ask me later pressed')},
+                    {
+                      text: 'Já efetuar o pedido!', onPress: () => {
+                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { id_produto: 1, numero_mesa: 24 })
+                          .then(function (response) {
+                            Alert.alert('Pedido de ' + l.name + ' realizado com sucesso!') 
+                          });
+                      }
+                    },
                     {
                       text: 'Cancel',
                       onPress: () => console.log('Cancel Pressed'),
                       style: 'cancel',
                     },
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
                   ],
-                  {cancelable: false},
+                  { cancelable: false },
                 );
-               }}
+              }}
             />
           ))
         }
@@ -121,7 +128,7 @@ function Bebidas(props) {
     </View>
   )
 }
-export default Bebidas;
+export default Cervejas;
 
 const styles = StyleSheet.create({
   container: {
