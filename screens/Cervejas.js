@@ -25,59 +25,23 @@ import {
 
 function Cervejas(props) {
 
-  // axios.get('https://api.cardapiodig.com.br/api/v1/produtos')
-  //   .then(function (response) {
-  //     response.data.forEach(function (value) {
-  //       console.log(value);
-  //       list.push(value);
-  //     });
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
+  const [cerveja] = useState(1);
+  const [beers, setBeers] = useState([]);
+  
 
-  const [list] = useState([
-    {
-      name: 'Skol',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/N7-KNcN6.png',
-      subtitle: 'R$ 9,00'
-    },
-    {
-      name: 'Brahma',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/57868492fdee035a04d48dc372e6e7fb.jpg',
-      subtitle: 'R$ 9,00'
-    },
-    {
-      name: 'Antartica Original',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/original_Easy-Resize.com_-840x630.jpg',
-      subtitle: 'R$ 11,00'
-    },
-    {
-      name: 'Bohemia',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/luminoso-bohemia-branco-redondo-bivolt-aluminio-led-30x4-cm-Carro-de-Mola-Z-1SITb.jpg',
-      subtitle: 'R$ 11,00'
-    },
-    {
-      name: 'Heinekein',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/9C_w5ogD_400x400.jpg',
-      subtitle: 'R$ 11,00'
-    },
-    {
-      name: 'Kaiser',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/download.jpeg',
-      subtitle: 'R$ 8,00'
-    },
-    {
-      name: 'Eisenbahn',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/fa0ad91604.jpg',
-      subtitle: 'R$ 11,00'
-    },
-    {
-      name: 'Colorado',
-      avatar_url: 'https://cardapio-digital.s3-sa-east-1.amazonaws.com/placa-decorativas-mdf-tampa-cerveja-colorado-D_NQ_NP_633898-MLB29311600711_022019-F.jpg',
-      subtitle: 'R$ 19,00'
-    },
-  ])
+  useEffect(() => {
+    loadBeers();
+  }, []);
+
+   async function loadBeers(){
+    await axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]='+cerveja)
+    .then(function (response) {
+      setBeers(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
   return (
     <View>
@@ -90,12 +54,12 @@ function Cervejas(props) {
       </Header>
       <ScrollView>
         {
-          list.map((l, i) => (
+          beers.map((l, i) => (
             <ListItem
               key={i}
-              leftAvatar={{ source: { uri: l.avatar_url } }}
-              title={l.name}
-              subtitle={l.subtitle}
+              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+ l.foto_produto } }}
+              title={l.nome}
+              subtitle={`R$` + l.valor + `,00`}
               bottomDivider
               fontFamily
               onPress={() => {
@@ -105,9 +69,9 @@ function Cervejas(props) {
                   [
                     {
                       text: 'Já efetuar o pedido!', onPress: () => {
-                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { id_produto: 1, numero_mesa: 24 })
+                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { id_produto: l.id, numero_mesa: 24 })
                           .then(function (response) {
-                            Alert.alert('Pedido de ' + l.name + ' realizado com sucesso!') 
+                            Alert.alert('Pedido de ' + l.name + ' realizado com sucesso!')
                           });
                       }
                     },

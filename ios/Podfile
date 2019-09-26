@@ -32,6 +32,8 @@ target 'cardapio_digital' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
   target 'cardapio_digitalTests' do
     inherit! :search_paths
     # Pods for testing

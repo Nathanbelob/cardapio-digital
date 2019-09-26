@@ -19,6 +19,7 @@ import Cervejas from "./screens/Cervejas";
 import Drinks from "./screens/Drinks";
 import Home from "./screens/Home";
 import Porcoes from "./screens/Porcoes";
+import Pedidos from "./screens/Pedidos";
 
 const CustomDrawerComponent = ({items, ...props}) => (
     <SafeAreaView style={{flex: 1}}>
@@ -35,6 +36,11 @@ const CustomDrawerComponent = ({items, ...props}) => (
         <DrawerNavigatorItems {...props}
         items={items.filter(item => item.routeName === "Porções")}
         />
+        <View style={{width:'90%', alignSelf: 'center', height:1, backgroundColor: 'gray', margin: 15}}></View> 
+        <DrawerNavigatorItems {...props}
+        items={items.filter(item => item.routeName === "Pedidos")}
+        />
+
       </ScrollView>
     </SafeAreaView>
 )
@@ -70,6 +76,15 @@ const MyDrawerNavigator = createDrawerNavigator({
     screen:Porcoes,
     navigationOptions: {
       drawerLabel: 'Porções',
+      drawerIcon: () => (
+        <Icon name={'ios-restaurant'} size={25} />
+        )
+    },
+  },
+  Pedidos: {
+    screen:Pedidos,
+    navigationOptions: {
+      drawerLabel: 'Pedidos',
       drawerIcon: () => (
         <Icon name={'ios-restaurant'} size={25} />
         )
