@@ -8,6 +8,8 @@
 
 import React, { Fragment, useState, useEffect } from 'react';
 import { List, ListItem } from 'react-native-elements';
+import { Header, Left, Right, Icon, Body } from 'native-base';
+
 import axios from 'axios';
 import {
   SafeAreaView,
@@ -18,26 +20,24 @@ import {
   StatusBar,
   FlatList,
   Image,
-  Modal,
-  TouchableHighlight,
   Alert
 } from 'react-native';
-import { Header, Left, Right, Icon, Body } from 'native-base';
 
-function Porcoes(props) {
+function NaoAlcoolicas(props) {
 
-
-  const [porcao] = useState(6)
-  const [porcoes, setPorcoes] = useState([]);
+  const [agua] = useState(3);
+  const [refrigerante] = useState(2);
+  const [beers, setBeers] = useState([]);
+  
 
   useEffect(() => {
-    loadPorcoes();
+    loadBeers();
   }, []);
-  
-  function loadPorcoes(){
-    axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]='+porcao)
+
+   async function loadBeers(){
+    await axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]='+agua+','+refrigerante)
     .then(function (response) {
-      setPorcoes(response.data)
+      setBeers(response.data)
     })
     .catch(function (error) {
       console.log(error);
@@ -45,7 +45,6 @@ function Porcoes(props) {
   }
 
   return (
-    <>
     <View>
       <Header>
         <Left>
@@ -56,47 +55,45 @@ function Porcoes(props) {
       </Header>
       <ScrollView>
         {
-          porcoes.map((l, i) => (
+          beers.map((l, i) => (
             <ListItem
               key={i}
-              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+l.foto_produto } }}
+              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+ l.foto_produto } }}
               title={l.nome}
-              subtitle={`R$`+l.valor}
+              subtitle={`R$` + l.valor}
               bottomDivider
               fontFamily
-              rightIcon={() => {
-                return(
-                  <>
-                  <Text>Detalhes </Text>
-                  <Icon name="ios-arrow-dropright" onPress={() => Alert.alert(l.descricao)}/>
-                  </>
-                )
-              }}
-              onPress={() => { 
+              onPress={() => {
                 Alert.alert(
                   'Adicionar aos pedidos?',
                   'Esse item será adicionado a sua lista de pedidos',
                   [
-                    {text: 'Já efetuar o pedido!', onPress: () => Alert.alert('Pedido realizado com sucesso!')},
+                    {
+                      text: 'Já efetuar o pedido!', onPress: () => {
+                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { id_produto: l.id, numero_mesa: 24 })
+                          .then(function (response) {
+                            Alert.alert('Pedido de ' + l.name + ' realizado com sucesso!')
+                          });
+                      }
+                    },
                     {
                       text: 'Cancel',
                       onPress: () => console.log('Cancel Pressed'),
                       style: 'cancel',
                     },
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
                   ],
-                  {cancelable: false},
+                  { cancelable: false },
                 );
-               }}
+              }}
             />
           ))
         }
       </ScrollView>
     </View>
-    </>
   )
 }
-export default Porcoes;
+export default NaoAlcoolicas;
 
 const styles = StyleSheet.create({
   container: {

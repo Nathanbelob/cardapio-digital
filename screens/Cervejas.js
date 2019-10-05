@@ -9,6 +9,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { List, ListItem } from 'react-native-elements';
 import { Header, Left, Right, Icon, Body } from 'native-base';
+import DeviceInfo from 'react-native-device-info';
 
 import axios from 'axios';
 import {
@@ -23,11 +24,18 @@ import {
   Alert
 } from 'react-native';
 
+import {
+  numeroMesa
+} from "../utils/helper";
+
 function Cervejas(props) {
 
   const [cerveja] = useState(1);
   const [beers, setBeers] = useState([]);
-  
+  const [idPhone, setIdPhone] = useState();
+  DeviceInfo.getUniqueId().then(uniqueId => {
+    setIdPhone(uniqueId)
+  });
 
   useEffect(() => {
     loadBeers();
@@ -59,7 +67,7 @@ function Cervejas(props) {
               key={i}
               leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+ l.foto_produto } }}
               title={l.nome}
-              subtitle={`R$` + l.valor + `,00`}
+              subtitle={`R$` + l.valor}
               bottomDivider
               fontFamily
               onPress={() => {
@@ -69,9 +77,14 @@ function Cervejas(props) {
                   [
                     {
                       text: 'Já efetuar o pedido!', onPress: () => {
-                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { id_produto: l.id, numero_mesa: 24 })
+                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { 
+                          id_produto: l.id, 
+                          numero_mesa: numeroMesa(idPhone), 
+                          quantidade: 1,
+                          status_pedido_id: 1
+                        })
                           .then(function (response) {
-                            Alert.alert('Pedido de ' + l.name + ' realizado com sucesso!')
+                            Alert.alert('Pedido de ' + l.nome + ' realizado com sucesso!')
                           });
                       }
                     },

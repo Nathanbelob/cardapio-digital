@@ -20,6 +20,7 @@ import Drinks from "./screens/Drinks";
 import Home from "./screens/Home";
 import Porcoes from "./screens/Porcoes";
 import Pedidos from "./screens/Pedidos";
+import NaoAlcoolicas from "./screens/NaoAlcoolicas";
 
 const CustomDrawerComponent = ({items, ...props}) => (
     <SafeAreaView style={{flex: 1}}>
@@ -29,7 +30,7 @@ const CustomDrawerComponent = ({items, ...props}) => (
       <ScrollView>
       <Text style={{textAlign:'center'}}>Bebidas</Text>
         <DrawerNavigatorItems {...props}
-        items={items.filter(item => item.routeName === "Cervejas" || item.routeName === "Drinks")}
+        items={items.filter(item => item.routeName === "Cervejas" || item.routeName === "Drinks" || item.routeName === "NaoAlcoolicas")}
         />
         <View style={{width:'90%', alignSelf: 'center', height:1, backgroundColor: 'gray', margin: 15}}></View> 
         <Text style={{textAlign:'center'}}>Comidas</Text>
@@ -59,6 +60,16 @@ const MyDrawerNavigator = createDrawerNavigator({
       drawerLabel: 'Cervejas',
       drawerIcon: () => (
         <Icon name={'ios-beer'} size={25} />
+        )
+    },
+  },
+  NaoAlcoolicas: {
+    screen:NaoAlcoolicas,
+    navigationOptions: {
+      title: 'Não Alcoolicas',
+      drawerLabel: 'Não Alcoolicas',
+      drawerIcon: () => (
+        <Icon name={'ios-water'} size={25} />
         )
     },
   },
