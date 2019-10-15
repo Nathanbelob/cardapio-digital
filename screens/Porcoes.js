@@ -20,80 +20,84 @@ import {
   Image,
   Modal,
   TouchableHighlight,
-  Alert
+  Alert,
+  Button
 } from 'react-native';
 import { Header, Left, Right, Icon, Body } from 'native-base';
+
+import ModalDetalhes from "../Components/ModalDetalhes";
+
 
 function Porcoes(props) {
 
 
   const [porcao] = useState(6)
   const [porcoes, setPorcoes] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemProduct, setItemProduct] = useState({});
 
   useEffect(() => {
     loadPorcoes();
-  }, []);
-  
-  function loadPorcoes(){
-    axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]='+porcao)
-    .then(function (response) {
-      setPorcoes(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  }, [porcoes]);
+
+  function loadPorcoes() {
+    axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]=' + porcao)
+      .then(function (response) {
+        setPorcoes(response.data)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function closeModal(){
+    setModalOpen(false)
   }
 
   return (
-    <>
     <View>
-      <Header>
-        <Left>
-          <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
-        </Left>
-        <Body />
-        <Right />
-      </Header>
+        <Header>
+          <Left>
+            <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
+          </Left>
+          <Body />
+          <Right />
+        </Header>
       <ScrollView>
         {
           porcoes.map((l, i) => (
             <ListItem
               key={i}
-              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+l.foto_produto } }}
+              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + l.foto_produto } }}
               title={l.nome}
-              subtitle={`R$`+l.valor}
+              subtitle={`R$` + l.valor}
               bottomDivider
               fontFamily
-              rightIcon={() => {
-                return(
-                  <>
-                  <Text>Detalhes </Text>
-                  <Icon name="ios-arrow-dropright" onPress={() => Alert.alert(l.descricao)}/>
-                  </>
-                )
+              onPress={() => {
+                setItemProduct(l)
+                setModalOpen(true)
               }}
-              onPress={() => { 
-                Alert.alert(
-                  'Adicionar aos pedidos?',
-                  'Esse item será adicionado a sua lista de pedidos',
-                  [
-                    {text: 'Já efetuar o pedido!', onPress: () => Alert.alert('Pedido realizado com sucesso!')},
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
-                  ],
-                  {cancelable: false},
-                );
-               }}
             />
+        
           ))
         }
       </ScrollView>
+
+      <Modal
+          animationType="slide"
+          transparent={false}
+          visible={modalOpen}
+          onRequestClose={() => {
+            setModalOpen(!modalOpen)
+          }}>{
+          <ModalDetalhes
+            item={itemProduct}
+            closeModal={() => {closeModal()}}
+          />
+          }
+        </Modal>
+
     </View>
-    </>
   )
 }
 export default Porcoes;

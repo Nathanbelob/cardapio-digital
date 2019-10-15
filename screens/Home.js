@@ -24,7 +24,7 @@ import {
 
 function App(props) {
   return (
-    <View styles={styles.container}>
+    <>
       <Header>
         <Left>
           <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
@@ -32,18 +32,18 @@ function App(props) {
         <Body />
         <Right />
       </Header>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Image source={require('../assets/logo-bar.jpeg')} style={{ height: 120, width: 120 }} />
-      </View>
-
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column' }}>
+        <View>
+          <Image source={require('../assets/logo-bar.jpeg')} style={{ height: 120, width: 120 }} />
+        </View>
         <Button
           title="Iniciar Atendimento!"
           onPress={() => Alert.alert('Simple Button pressed')}
         />
-
       </View>
-    </View>
+
+    </>
+
   )
 }
 

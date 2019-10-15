@@ -12,36 +12,42 @@ import { Header, Left, Right, Icon, Body } from 'native-base';
 
 import axios from 'axios';
 import {
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
-  StatusBar,
-  FlatList,
-  Image,
-  Alert
+  Alert,
+  Modal,
+  Button,
+  Image
 } from 'react-native';
+import ModalDetalhes from "../Components/ModalDetalhes";
+
 
 function NaoAlcoolicas(props) {
 
   const [agua] = useState(3);
   const [refrigerante] = useState(2);
   const [beers, setBeers] = useState([]);
-  
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemProduct, setItemProduct] = useState({});
 
   useEffect(() => {
-    loadBeers();
+    load();
   }, []);
 
-   async function loadBeers(){
-    await axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]='+agua+','+refrigerante)
-    .then(function (response) {
-      setBeers(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  async function load() {
+    await axios.get('https://api.cardapiodig.com.br/api/v1/produtos?filter[categoria_id]=' + agua + ',' + refrigerante)
+      .then(function (response) {
+        setBeers(response.data)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function closeModal(){
+    setModalOpen(false)
   }
 
   return (
@@ -58,38 +64,33 @@ function NaoAlcoolicas(props) {
           beers.map((l, i) => (
             <ListItem
               key={i}
-              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+ l.foto_produto } }}
+              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + l.foto_produto } }}
               title={l.nome}
               subtitle={`R$` + l.valor}
               bottomDivider
               fontFamily
               onPress={() => {
-                Alert.alert(
-                  'Adicionar aos pedidos?',
-                  'Esse item será adicionado a sua lista de pedidos',
-                  [
-                    {
-                      text: 'Já efetuar o pedido!', onPress: () => {
-                        axios.post('https://api.cardapiodig.com.br/api/v1/pedidos', { id_produto: l.id, numero_mesa: 24 })
-                          .then(function (response) {
-                            Alert.alert('Pedido de ' + l.name + ' realizado com sucesso!')
-                          });
-                      }
-                    },
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ],
-                  { cancelable: false },
-                );
+                setItemProduct(l)
+                setModalOpen(true)
               }}
             />
           ))
         }
       </ScrollView>
+
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalOpen}
+        onRequestClose={() => {
+          setModalOpen(!modalOpen)
+        }}>
+        <ModalDetalhes
+          item={itemProduct}
+          closeModal={() => {closeModal()}}
+        />
+      </Modal>
+
     </View>
   )
 }
