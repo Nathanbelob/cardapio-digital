@@ -36,10 +36,10 @@ function Pedidos(props) {
   }, [pedidos]);
 
    async function loadPedidos(){
-    DeviceInfo.getUniqueId().then(uniqueId => {
-      setIdPhone(uniqueId)
-    });
-    setNumeroMesa(numeroMesa(idPhone));
+    // DeviceInfo.getUniqueId().then(uniqueId => {
+    //   setIdPhone(uniqueId)
+    // });
+    // setNumeroMesa(numeroMesa(idPhone));
     await axios.get('https://api.cardapiodig.com.br/api/v1/pedidos?filter[numero_mesa]='+numero_mesa)
     .then(function (response) {
       setPedidos(response.data.pedidos)

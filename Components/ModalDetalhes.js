@@ -27,15 +27,14 @@ import PropTypes from "prop-types";
 function ModalDetalhes(props) {
     const [width, setWidth] = useState();
     const [height, setHeight] = useState();
-    const [idPhone, setIdPhone] = useState(``);
+    const [idPhone, setIdPhone] = useState(`2ad00fb5394036a6`);
     const [quantidade, setQuantidade] = useState(``);
 
 
     useEffect(() => {
-        DeviceInfo.getUniqueId().then(uniqueId => {
-            setIdPhone(uniqueId)
-        });
-        console.log(idPhone);
+        // DeviceInfo.getUniqueId().then(uniqueId => {
+        //     setIdPhone(uniqueId)
+        // });
         if (props.item.foto_produto != undefined) {
             Image.getSize(`https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + props.item.foto_produto, (width, height) => {
                 setWidth(width);
