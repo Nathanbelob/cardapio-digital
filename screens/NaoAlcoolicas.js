@@ -52,7 +52,7 @@ function NaoAlcoolicas(props) {
 
   return (
     <View>
-      <Header>
+      <Header style={styles.header} hasTabs>
         <Left>
           <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
         </Left>
@@ -106,6 +106,9 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     height: 44,
+  },
+  header: { 
+    backgroundColor: "gray",
   },
 })
 

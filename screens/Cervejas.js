@@ -8,20 +8,23 @@
 
 import React, { Fragment, useState, useEffect } from 'react';
 import { List, ListItem } from 'react-native-elements';
-import { Header, Left, Right, Icon, Body } from 'native-base';
-
+import { Header, Left, Right, Body } from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Modal from "react-native-modal";
 import axios from 'axios';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
-  Modal,
+  TextInput,
   Text,
   StatusBar,
   FlatList,
   Image,
-  Alert
+  TouchableHighlight,
+  Alert,
+  Button
 } from 'react-native';
 
 import {
@@ -52,52 +55,62 @@ function Cervejas(props) {
       });
   }
 
-  function closeModal(){
+  function closeModal() {
     setModalOpen(false)
   }
 
   return (
-    <View>
-      <Header>
-        <Left>
-          <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
-        </Left>
-        <Body />
-        <Right />
-      </Header>
-      <ScrollView>
+    <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+      <View>
+        <Header style={styles.header} hasTabs>
+          <Left>
+            <Icon name="menu" size={26} onPress={() => props.navigation.openDrawer()} />
+          </Left>
+          <Body />
+          <Right />
+        </Header>
         {
           beers.map((l, i) => (
-            <ListItem
-              key={i}
-              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + l.foto_produto } }}
-              title={l.nome}
-              subtitle={`R$` + l.valor}
-              bottomDivider
-              fontFamily
-              onPress={() => {
-                setItemProduct(l)
-                setModalOpen(true)
-              }}
-            />
+            <>
+              <ListItem
+                leftAvatar={{
+                  source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + l.foto_produto },
+                  size: "xlarge",
+                  rounded: false
+                }}
+                title={
+                  <Text style={{ fontWeight: 'bold', fontSize: 30 }}> {l.nome}</Text>
+                }
+                subtitle={
+                  <>
+                    <Text style={{ fontSize: 20 }}> {'R$' + l.valor}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 20 }}> {l.descricao}</Text>
+                  </>
+                }
+                onPress={() => {
+                  setItemProduct(l)
+                  setModalOpen(true)
+                }}
+                bottomDivider
+                fontFamily
+              />
+              <Modal isVisible={modalOpen}
+                onBackdropPress={() => setModalOpen(false)}
+                onBackButtonPress={() => setModalOpen(false)}
+                backdropOpacity={0.8}>
+                {
+                  <ModalDetalhes
+                    item={itemProduct}
+                    closeModal={() => { closeModal() }}
+                    comida={false}
+                  />
+                }
+              </Modal>
+            </>
           ))
         }
-      </ScrollView>
-
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalOpen}
-        onRequestClose={() => {
-          setModalOpen(!modalOpen)
-        }}>
-        <ModalDetalhes
-          item={itemProduct}
-          closeModal={() => {closeModal()}}
-        />
-      </Modal>
-
-    </View>
+      </View>
+    </ScrollView>
   )
 }
 export default Cervejas;
@@ -112,6 +125,9 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     height: 44,
+  },
+  header: {
+    backgroundColor: "gray",
   },
 })
 

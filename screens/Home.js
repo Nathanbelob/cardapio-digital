@@ -19,28 +19,42 @@ import {
   StatusBar,
   FlatList,
   Image,
-  Button
+  Button,
+  ImageBackground,
+  TouchableOpacity
 } from 'react-native';
 
 function App(props) {
   return (
     <>
-      <Header>
+      <Header style={styles.header} hasTabs>
         <Left>
           <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
         </Left>
         <Body />
         <Right />
       </Header>
-      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column' }}>
-        <View>
-          <Image source={require('../assets/logo-bar.jpeg')} style={{ height: 120, width: 120 }} />
+
+
+      <ImageBackground source={require('../assets/fundo.jpeg')}
+        style={styles.backgroundImage}>
+
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1}}>
+          <View>
+            <Image source={require('../assets/logo-sem-fundo.png')} style={{ height: 300, width: 300 }} />
+          </View>
+          <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20, fontFamily:'cinzel', marginBottom: 15 }}> Seja Bem Vindo!</Text>
+          <Button
+          color='#f2a951'
+          title="Iniciar atendimento!"
+          onPress={() => props.navigation.openDrawer()}
+          style={{ marginTop: 10, borderRadius: 10 }}
+          />
         </View>
-        <Button
-          title="Iniciar Atendimento!"
-          onPress={() => Alert.alert('Simple Button pressed')}
-        />
-      </View>
+
+
+      </ImageBackground>
+
 
     </>
 
@@ -50,8 +64,23 @@ function App(props) {
 export default App;
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'cover'
   },
-})
+  header: { 
+    backgroundColor: "gray",
+  },
+});
+
+const styles2 = StyleSheet.create({
+  text: {
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'rgba(0,0,0,0)',
+    fontSize: 32
+  }
+});
 
