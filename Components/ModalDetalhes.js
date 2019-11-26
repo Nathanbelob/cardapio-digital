@@ -121,32 +121,20 @@ function ModalDetalhes(props) {
                 </>
                 }
                 <View style={{
-                    flexDirection: "row"
+                    flexDirection: "row",
+                    justifContent: "space-around",
                 }}>
-                    <View style={{
-                        flex: 1,
-                        marginLeft: 150,
-                        marginRight: 12,
-                        marginTop: 8
-                    }}>
-                        <Icon style={{ marginRight: 10 }}
+                    <View style={{marginTop:8}}>
+                        <Icon
                             name={'remove-circle-outline'}
                             onPress={() => quantidade == 0 ? setQuantidade(0) : setQuantidade(parseInt(quantidade - 1))}
                             size={40} />
                     </View>
-                    <View style={{
-                        flex: 1,
-                    }}>
-                        <Text style={{ fontSize: 40, marginBottom: 30 }}> {quantidade}</Text>
+                    <View>
+                        <Text style={{ fontSize: 40, marginBottom:30, paddingLeft:40, paddingRight:40}}> {quantidade}</Text>
                     </View>
-                    <View style={{
-                        flex: 1,
-                        marginRight: 150,
-                        marginLeft: 7,
-                        marginTop: 8
-
-                    }}>
-                        <Icon style={{ marginLeft: 10 }}
+                    <View style={{marginTop:8}}>
+                        <Icon
                             name={'add-circle-outline'}
                             onPress={() => setQuantidade(parseInt(quantidade + 1))}
                             size={40}

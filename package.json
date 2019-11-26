@@ -16,6 +16,7 @@
     "react-native": "0.60.5",
     "react-native-device-info": "^3.1.4",
     "react-native-elements": "^1.2.0",
+    "react-native-flip-timer": "0.0.4",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-modal": "^11.4.0",
     "react-native-reanimated": "^1.2.0",

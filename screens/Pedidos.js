@@ -16,7 +16,9 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  Text
+  Text,
+  Alert,
+  Button
 } from 'react-native';
 
 import {
@@ -35,36 +37,36 @@ function Pedidos(props) {
     loadPedidos();
   }, [pedidos]);
 
-   async function loadPedidos(){
+  async function loadPedidos() {
     // DeviceInfo.getUniqueId().then(uniqueId => {
     //   setIdPhone(uniqueId)
     // });
     // setNumeroMesa(numeroMesa(idPhone));
-    await axios.get('https://api.cardapiodig.com.br/api/v1/pedidos?filter[numero_mesa]='+numero_mesa)
-    .then(function (response) {
-      setPedidos(response.data.pedidos)
-      setValorTotal(response.data.valor_total)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    await axios.get('https://api.cardapiodig.com.br/api/v1/pedidos?filter[numero_mesa]=' + numero_mesa)
+      .then(function (response) {
+        setPedidos(response.data.pedidos)
+        setValorTotal(response.data.valor_total)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   return (
-      <ScrollView>
-    <View>
-    <Header style={styles.header} hasTabs>
-        <Left>
-          <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
-        </Left>
-        <Body />
-        <Right />
-      </Header>
+    <ScrollView>
+      <View>
+        <Header style={styles.header} hasTabs>
+          <Left>
+            <Icon name="menu" onPress={() => props.navigation.openDrawer()} />
+          </Left>
+          <Body />
+          <Right />
+        </Header>
         {
           pedidos.map((l, i) => (
-            <ListItem 
+            <ListItem
               key={i}
-              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/`+ l.cad_produto.foto_produto } }}
+              leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + l.cad_produto.foto_produto } }}
               title={l.cad_produto.nome}
               subtitle={`Valor total do pedido: R$${l.cad_produto.valor * l.quantidade} \nStatus: ${l.cfg_status_pedido.descricao} \nQuantidade: ${l.quantidade}`}
               bottomDivider
@@ -72,9 +74,30 @@ function Pedidos(props) {
             />
           ))
         }
-        <Text>Total Parcial da conta: R${valor_total}</Text>
-    </View>
-      </ScrollView>
+        <View style={{ flexDirection: 'row', padding: 30, backgroundColor: '#f2a951' }}>
+          <View style={{ flex: 2 }}>
+            <Text style={{ fontSize: 30 }}>Total Parcial da conta: R${valor_total}</Text>
+          </View>
+          <View style={{ flex: 2, marginTop: 12 }}>
+            <Button
+              title= "Solicitar pagamento!"
+              onPress={() => {
+                axios.post('https://api.cardapiodig.com.br/api/v1/encerrar-conta', {
+                  id: numero_mesa
+                })
+                  .then(function () {
+                    Alert.alert('Pagamento solicitado. Por favor, aguarde o garçom!');
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+              }}
+              color="#272c33"
+            />
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   )
 }
 export default Pedidos;
@@ -90,7 +113,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 44,
   },
-  header: { 
+  header: {
     backgroundColor: "gray",
   },
 })
