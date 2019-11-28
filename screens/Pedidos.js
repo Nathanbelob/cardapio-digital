@@ -46,10 +46,20 @@ function Pedidos(props) {
       .then(function (response) {
         setPedidos(response.data.pedidos)
         setValorTotal(response.data.valor_total)
+        console.log(response)
       })
       .catch(function (error) {
         console.log(error);
       });
+  }
+
+  function calculaAdicionais(valor) {
+    var total = 0;
+    valor.map((l) => (
+      total += l.adicional.valor
+    ))
+
+    return total;
   }
 
   return (
@@ -68,7 +78,15 @@ function Pedidos(props) {
               key={i}
               leftAvatar={{ source: { uri: `https://cardapio-digital.s3-sa-east-1.amazonaws.com/` + l.cad_produto.foto_produto } }}
               title={l.cad_produto.nome}
-              subtitle={`Valor total do pedido: R$${l.cad_produto.valor * l.quantidade} \nStatus: ${l.cfg_status_pedido.descricao} \nQuantidade: ${l.quantidade}`}
+              subtitle={`Valor total do pedido: R$${(parseInt(l.cad_produto.valor + parseInt(calculaAdicionais(l.adicionais_pedidos))) * l.quantidade)}\nStatus: ${l.cfg_status_pedido.descricao} \nQuantidade: ${l.quantidade}${
+                (l.adicionais_pedidos).length == 0 ? `` :
+                `\nAdicionais: ${
+                l.adicionais_pedidos.map((adicional) => (
+                  adicional.adicional.nome
+                ))
+                }`
+                }
+              `}
               bottomDivider
               fontFamily
             />
@@ -80,7 +98,7 @@ function Pedidos(props) {
           </View>
           <View style={{ flex: 2, marginTop: 12 }}>
             <Button
-              title= "Solicitar pagamento!"
+              title="Solicitar pagamento!"
               onPress={() => {
                 axios.post('https://api.cardapiodig.com.br/api/v1/encerrar-conta', {
                   id: numero_mesa
