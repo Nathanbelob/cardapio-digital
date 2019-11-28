@@ -33,7 +33,6 @@ import Cronometro from "../Components/Cronometro";
 function App(props) {
 
   const [showMenu, setShowMenu] = useState(false);
-  const [showTimer, setShowTimer] = useState(false);
   const [shwowButtonStart, setShowButtonStart] = useState(true);
   const [idPhone, setIdPhone] = useState(`2ad00fb5394036a6`);
 
@@ -83,7 +82,6 @@ function App(props) {
                           props.navigation.openDrawer()
                           setShowMenu(true)
                           setShowButtonStart(false)
-                          setShowTimer(true)
                         }},
                       ],
                       {cancelable: false},
@@ -96,10 +94,6 @@ function App(props) {
               style={{ marginTop: 10, borderRadius: 10 }}
             />
             </>
-          }
-          {
-            showTimer &&
-            <Cronometro/>
           }
         </View>
 
